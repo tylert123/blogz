@@ -19,38 +19,14 @@ class Blog(db.Model):
 
 @app.route('/blog', methods=['GET','POST'])
 def blog_posts():
-    return render_template('blog.html', blog_post=Blog.query.all())
-
-
-# @app.route('/newblog', methods=['GET','POST'])
-# def new_post():
-#     blog_title = request.form['blog_title']
-#     blog_body = request.form['blog_body']
-
-#     if (blog_title.strip()=='') and (blog_body.strip()==''):
-#         flash('Please enter a blog title', 'error')
-#         flash('Please enter a blog message', 'error')
-
-#         return render_template('newpost.html')
-
-#     if (not blog_title) or (blog_title.strip()==''):
-#         flash('Please enter a blog title', 'error')
-#         return render_template('newpost.html')
-
-#     if (not blog_body) or (blog_body.strip()==''):
-#         flash('Please enter a blog message', 'error')
-#         return render_template('newpost.html')
-
-#     return render_template('blog.html')
-
-# def ind_post():
-#     post_num = request.args.get('post.id')
-#     post_info = Blog.query.filter_by(post_num).all()
-#     if post_num in post_info:
-#         post_title = post_info.title(post_num)
-#         post_body = post_info.body(post_num)
-
-#     return render_template('blog.html?id={0}'.format(post_num), post_num=post_num, post_title=post_title, post_body=post_body)
+    params = request.args.get('id')
+    if not params:
+        return render_template('blog.html', blog_post=Blog.query.all())
+    else:
+        indv_post = Blog.query.get(params)
+        title = indv_post.title
+        body = indv_post.body
+        return render_template('single_post.html',blog_title=title,blog_body=body)
 
 @app.route('/newpost', methods=['GET','POST'])
 def new_post():
@@ -61,27 +37,26 @@ def new_post():
         if (blog_title.strip()=='') and (blog_body.strip()==''):
             flash('Please enter a blog title', 'error')
             flash('Please enter a blog message', 'error')
-
             return render_template('newpost.html')
 
         if (not blog_title) or (blog_title.strip()==''):
             flash('Please enter a blog title', 'error')
-            return render_template('newpost.html')
+            return render_template('newpost.html', blog_body=blog_body)
 
         if (not blog_body) or (blog_body.strip()==''):
             flash('Please enter a blog message', 'error')
-            return render_template('newpost.html')
+            return render_template('newpost.html', blog_title=blog_title)
 
         if (blog_title.strip()!='') and (blog_body.strip()!=''):
             new_blog_post = Blog(blog_title,blog_body)
             db.session.add(new_blog_post)
             db.session.commit()
-            return redirect('/blog')
+            new_post_id = Blog.query.order_by(Blog.id.desc()).first()
+            new_post_id = new_blog_post.id
+            return redirect('/blog?id='+str(new_post_id))
 
     else: 
         return render_template('newpost.html')
-
-    # return render_template('blog.html')
 
 if __name__ == '__main__':
     app.run()

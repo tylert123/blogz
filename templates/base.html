@@ -18,12 +18,13 @@
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <p class="error">{{ messages[0] }}</p>
+        <p class="error">{{messages[0]}}</p>
         <p class="error">{{messages[1]}}</p>
         {%endif%}
     {%endwith%}
+    
     {%block content%}
     {%endblock%}
-    
+
 </body>
 </html>
