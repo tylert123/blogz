@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Build-a-Blog</title>
+    <style>
+        .error  {
+            color: red;
+        }
+
+    </style>
 </head>
 <body>
     <a href="/blog">Main Blog Page</a>
     <a href="/newpost" style="display: inline-block">Add a Blog Entry</a>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <p class="error">{{ messages[0] }}</p>
+        <p class="error">{{messages[1]}}</p>
+        {%endif%}
+    {%endwith%}
     {%block content%}
     {%endblock%}
+    
 </body>
 </html>

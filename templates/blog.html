@@ -3,10 +3,9 @@
 {%block content%}
     <h1>Build a Blog</h1>
     <br>
-    {% for name in title %}
-    <h2>{{name}}</h2>
-    {%endfor%}
-    <!-- {% for body in bodies %}
-    <p>{{body}}</p>
-    {%endfor%} -->
+    {% for post in blog_post %}
+        <h2><a href="/blog?id={{post.id}}">{{post.title}}</a></h2>
+        <p>{{post.body}}</p>
+        <hr>
+    {% endfor %}
 {%endblock%}
