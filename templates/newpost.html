@@ -6,7 +6,7 @@
     <form action="/newpost" method="POST">
         <label>
             <p>Title for your new Blog post:</p>
-            <input type="text" name="blog_title" value={{blog_title}}>
+            <input type="text" name="blog_title" value='{{blog_title}}'>
             {% if no_title==1 %}
                 {% with messages = get_flashed_messages() %}
                     <p class="error"><em>{{messages[0]}}</em></p>
