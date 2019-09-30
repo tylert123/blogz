@@ -1,17 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Add Blog Entry</h1>
+<div style="padding: 50px">
+    <h1 style="justify-content: center">Add Blog Entry</h1>
     <form action="/newpost" method="POST">
         <label>
             <p>Title for your new Blog post:</p>
             <input type="text" name="blog_title" value={{blog_title}}>
+            {% if no_title==1 %}
+                {% with messages = get_flashed_messages() %}
+                    <p class="error"><em>{{messages[0]}}</em></p>
+                {%endwith%}
+            {%endif%}
         </label>
+        <br>
         <label>
             <p>Your new Blog message:</p>
             <textarea name="blog_body">{{blog_body}}</textarea>
+            {% if no_body==1 %}
+                {% with messages = get_flashed_messages() %}
+                    <p class="error"><em>{{messages[0]}}</em></p>
+                {%endwith%}
+            {%endif%}
+            {% if no_body==2 %}
+                {% with messages = get_flashed_messages() %}
+                    <p class="error"><em>{{messages[1]}}</em></p>
+                {%endwith%}
+            {%endif%}
         </label>
+        <br>
         <input type="submit">
     </form>
+</div>
     
 {% endblock %}

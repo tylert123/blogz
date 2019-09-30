@@ -21,7 +21,7 @@ class Blog(db.Model):
 def blog_posts():
     params = request.args.get('id')
     if not params:
-        return render_template('blog.html', blog_post=Blog.query.all())
+        return render_template('blog.html', blog_post=Blog.query.order_by(Blog.id.desc()).all())
     else:
         indv_post = Blog.query.get(params)
         title = indv_post.title
@@ -37,15 +37,15 @@ def new_post():
         if (blog_title.strip()=='') and (blog_body.strip()==''):
             flash('Please enter a blog title', 'error')
             flash('Please enter a blog message', 'error')
-            return render_template('newpost.html')
+            return render_template('newpost.html', no_title=1, no_body=2)
 
         if (not blog_title) or (blog_title.strip()==''):
             flash('Please enter a blog title', 'error')
-            return render_template('newpost.html', blog_body=blog_body)
+            return render_template('newpost.html', blog_body=blog_body, no_title=1)
 
         if (not blog_body) or (blog_body.strip()==''):
             flash('Please enter a blog message', 'error')
-            return render_template('newpost.html', blog_title=blog_title)
+            return render_template('newpost.html', blog_title=blog_title, no_body=1)
 
         if (blog_title.strip()!='') and (blog_body.strip()!=''):
             new_blog_post = Blog(blog_title,blog_body)
