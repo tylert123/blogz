@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        <p class="error"><em>{{messages[0]}}</em></p>
+    {%endwith%}
+    <form method="POST" action="/signup">
+        <label>
+            <h3>Username:</h3>
+            <input type="text" name="username">
+        </label>
+        <label>
+            <h3>Password:</h3>
+            <input type="password" name="password">
+        </label>
+        <label>
+            <h3>Verify Password:</h3>
+            <input type="password" name="verify">
+        </label>
+        <input type="button" value="Create Account">
+    </form>
+{% endblock %}
