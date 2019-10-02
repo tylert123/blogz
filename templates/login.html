@@ -4,8 +4,7 @@
     {% with messages = get_flashed_messages() %}
         <p class='error'><em>{{messages[0]}}</em></p>
     {% endwith %}
-    <a href="/signup">Create an Account</a>
-    <form method="POST" action="/login">
+    <form method="POST" action="/login" style="padding-bottom: 15px;">
         <label>
             <h3>Username:</h3>
             <input type="text" name="username">
@@ -18,4 +17,5 @@
         <br>
         <input type="submit" value="Log In!">
     </form>
+    <a href="/signup">Create an Account</a>
 {% endblock %}

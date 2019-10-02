@@ -29,6 +29,12 @@ class User(db.Model):
         self.username = username
         self.password = password
 
+@app.before_request
+def require_login():
+    allowed_routes = ['user_login','blog_posts','index','user_signup']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        return redirect('/login')
+
 @app.route('/blog', methods=['GET','POST'])
 def blog_posts():
     params = request.args.get('id')
@@ -45,6 +51,7 @@ def new_post():
     if request.method == 'POST':
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
+        owner = User.query.filter_by(username=session['username']).first()
 
         if (blog_title.strip()=='') and (blog_body.strip()==''):
             flash('Please enter a blog title', 'error')
@@ -60,7 +67,7 @@ def new_post():
             return render_template('newpost.html', blog_title=blog_title, no_body=1)
 
         if (blog_title.strip()!='') and (blog_body.strip()!=''):
-            new_blog_post = Blog(blog_title,blog_body)
+            new_blog_post = Blog(blog_title,blog_body,owner)
             db.session.add(new_blog_post)
             db.session.commit()
             new_post_id = Blog.query.order_by(Blog.id.desc()).first()
@@ -92,7 +99,7 @@ def user_login():
 
     return render_template('login.html')
 
-@app.route('/signup', methods=['GET','POST'])
+@app.route('/signup', methods=['POST','GET'])
 def user_signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -100,20 +107,41 @@ def user_signup():
         verify = request.form['verify']
         existing_user = User.query.filter_by(username=username).first()
 
-        # if (username.strip()!='') and (password.strip()!='') and (password == verify):
+        if password != verify:
+            flash('Passwords do not match')
+            return redirect('/signup')
 
-        if not existing_user:
-            new_user = User(username,password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['username'] = username
-            return redirect('/newpost')
+        if existing_user:
+            flash('User already exists')
+            return redirect('/signup')
+
+        if len(username.strip()) < 3:
+            flash('Please enter a username longer then 2 characters')
+            return redirect('/signup')
+
+        if len(password.strip()) < 3:
+            flash('Please enter a password longer then 2 characters')
+            return redirect('/signup')
+
+        if (username.strip()!='') and (password.strip()!='') and (password == verify):
+
+            if not existing_user:
+                new_user = User(username,password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = username
+                return redirect('/newpost')
 
         else:
-            flash('ERROR')
+            flash('Please do not leave any fields blank')
             return redirect('/signup')
 
     return render_template('signup.html')
+
+@app.route('/logout')
+def user_logout():
+    del session['username']
+    return redirect('/blog')
 
 if __name__ == '__main__':
     app.run()

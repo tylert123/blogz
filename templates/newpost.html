@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div style="padding: 50px">
+<div style="padding: 25px">
     <h1 style="justify-content: center">Add Blog Entry</h1>
+    {% with messages = get_flashed_messages() %}
+        <p class='success'><em>{{messages[0]}}</em></p>
+    {% endwith %}
     <form action="/newpost" method="POST">
         <label>
             <p>Title for your new Blog post:</p>

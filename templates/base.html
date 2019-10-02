@@ -13,20 +13,19 @@
             color: red;
         }
 
+        .success {
+            color: green;
+        }
+
     </style>
 </head>
-<body>
-    <div style="padding: 10px;">
-        <a href="/blog" style="padding: 5px;">Main Blog Page</a>
-        <a href="/newpost" style="padding: 5px;">Add a Blog Entry</a>
-    <!-- <div style="padding-top:25px;">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <p class="error"><em>{{messages[0]}}</em></p>
-            <p class="error"><em>{{messages[1]}}</em></p>
-            {%endif%}
-        {%endwith%}
-    </div> -->
+<body style="margin: 2em;">
+    <div>
+        <a href="/" style="padding-right: 5px;">Home</a>
+        <a href="/blog" style="padding-right: 5px;">Main Blog Page</a>
+        <a href="/newpost">Add a Blog Entry</a>
+        <a href="/logout" style="float: right;">Logout</a>
+        <a href="/login" style="float: right; padding-right: 10px;">Login</a>
     </div>
     {%block content%}
     {%endblock%}
