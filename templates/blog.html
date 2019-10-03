@@ -2,7 +2,7 @@
 
 {%block content%}
 <div style="padding: 25px;"  class="container">
-    <h1 style="text-align: center">Build a Blog</h1>
+    <h1 style="text-align: center">Blogz</h1>
     {% for post in blog_post %}
         <h2><a href="/blog?id={{post.id}}">{{post.title}}</a></h2>
         <p>{{post.body}}</p>
