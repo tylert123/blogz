@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container" style="padding: 25px;">
     {% with messages = get_flashed_messages() %}
         <p class='error'><em>{{messages[0]}}</em></p>
     {% endwith %}
@@ -18,4 +19,5 @@
         <input type="submit" value="Log In!">
     </form>
     <a href="/signup">Create an Account</a>
+</div>
 {% endblock %}
