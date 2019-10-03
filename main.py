@@ -38,13 +38,29 @@ def require_login():
 @app.route('/blog', methods=['GET','POST'])
 def blog_posts():
     params = request.args.get('id')
-    if not params:
-        return render_template('blog.html', blog_post=Blog.query.order_by(Blog.id.desc()).all())
-    else:
+    username = request.args.get('username')
+
+    if not params and not username:
+        return render_template('blog.html', blog_post=Blog.query.order_by(Blog.id.desc()).all(), user=User.query.all())
+
+    if params:
         indv_post = Blog.query.get(params)
         title = indv_post.title
         body = indv_post.body
-        return render_template('single_post.html',blog_title=title,blog_body=body)
+        return render_template('single_post.html',blog_title=title,blog_body=body,users=User.query.all(), post=indv_post)
+
+    if username:
+        owner = User.query.filter_by(username= request.args.get('username')).first()
+        posts = Blog.query.filter_by(owner=owner).all()
+        return render_template('singleUser.html', posts=posts, username=username)
+
+
+        # user_post = User.query.get(params2)
+        # blog_post=Blog.query.order_by(Blog.id.desc()).all()
+        # for post in blog_post:
+        #     if post.owner_id == user_post.id:
+                
+        
 
 @app.route('/newpost', methods=['GET','POST'])
 def new_post():
@@ -142,6 +158,12 @@ def user_signup():
 def user_logout():
     del session['username']
     return redirect('/blog')
+
+@app.route('/')
+def index():
+    # blog_users = blog_users.username
+    return render_template('index.html', blog_users = User.query.all())
+    
 
 if __name__ == '__main__':
     app.run()

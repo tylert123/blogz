@@ -6,6 +6,11 @@
     {% for post in blog_post %}
         <h2><a href="/blog?id={{post.id}}">{{post.title}}</a></h2>
         <p>{{post.body}}</p>
+        {% for author in user %}
+            {% if author.id == post.owner_id %}
+                <sub><em>Written by: </em><a href="/blog?username={{author.username}}">{{author.username}}</a></sub>
+            {% endif %}
+        {% endfor %}
         <hr>
     {% endfor %}
 </div>

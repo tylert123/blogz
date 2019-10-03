@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 style="margin: 15px;">Author: {{username}}</h2>
+{% for post in posts %}
+<div style="margin: 20px;">
+    <h4>{{post.title}}</h4>
+    <p>{{post.body}}</p>
+</div>
+{% endfor %}
+{% endblock %}
